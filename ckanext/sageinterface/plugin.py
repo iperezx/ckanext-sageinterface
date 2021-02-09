@@ -9,13 +9,14 @@ log = logging.getLogger('ckanext.sageinterface')
 
 class SageinterfacePlugin(p.SingletonPlugin):
     p.implements(p.IConfigurer, inherit=True)
+    p.implements(p.IConfigurable, inherit=True)
     p.implements(p.IResourceView, inherit=True)
     proxy_enabled = False
 
     def update_config(self, config_):
         p.toolkit.add_template_directory(config_, 'templates')
         p.toolkit.add_public_directory(config_, 'public')
-        p.toolkit.add_resource('fanstatic', 'sageinterface')
+        p.toolkit.add_resource('public', 'ckanext-sageinterface')
         self.proxy_enabled = p.plugin_loaded('resource_proxy')
         self.text_formats = ['text/plain', 'txt', 'plain']
         self.xml_formats = ['xml', 'rdf', 'rdf+xml', 'owl+xml', 'atom', 'rss']
