@@ -4,6 +4,7 @@ import json
 from pylons import config
 import ckan.plugins as p
 import ckanext.resourceproxy.plugin as proxy
+from ckanext.sageinterface.lib.helpers import get_url
 
 log = logging.getLogger('ckanext.sageinterface')
 
@@ -27,6 +28,10 @@ class SageinterfacePlugin(p.SingletonPlugin):
         # IResourceView
         # Make it a requirement that I need to add resource_proxy to my plugins
         # So this can work
+        resource = data_dict['resource']
+        url,archived = get_url(resource)
+        print url
+        print archived
         datastoreActive = data_dict['resource'].get('datastore_active', False)
         log.info('can_view::proxy_enabled: {0}'.format(self.proxy_enabled))
         log.info('can_view::datastoreActive: {0}'.format(datastoreActive))
@@ -68,12 +73,17 @@ class SageinterfacePlugin(p.SingletonPlugin):
                     'json_formats': self.json_formats,
                     'jsonp_formats': self.jsonp_formats,
                     'xml_formats': self.xml_formats}
-
-        url = proxy.get_proxified_resource_url(data_dict)
-        format_lower = data_dict['resource']['format'].lower()
-        if format_lower in self.jsonp_formats:
-            url = data_dict['resource']['url']
-
+        
+        package_name = data_dict['package']['name']
+        resource = data_dict['resource']
+        query = dict()
+        url,archived = get_url(resource,package_name,query)
+        if not archived:
+            url = proxy.get_proxified_resource_url(data_dict)
+            format_lower = data_dict['resource']['format'].lower()
+            if format_lower in self.jsonp_formats:
+                url = data_dict['resource']['url']
+        
         return {'preview_metadata': json.dumps(metadata),
                 'resource_json': json.dumps(data_dict['resource']),
                 'resource_url': json.dumps(url)}
