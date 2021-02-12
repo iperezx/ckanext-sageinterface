@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block subtitle %}{% endblock %}
+
+{% block page %}
+  <div data-module="sageinterface_recline"
+       data-module-resource-url = "{{ h.dump_json(resource_url)}}";
+       data-module-resource-view = "{{ h.dump_json(resource_view_json) }}";
+       >
+    <h4 class="loading-dialog">
+      <div class="loading-spinner"></div>
+      <div class="left">{{ _('Loading...') }}</div>
+    </h4>
+  </div>
+  {% resource 'ckanext-sageinterface/main' %}
+{% endblock %}
+
+{% block styles %}{% endblock %}
+{% block custom_styles %}{% endblock %}
