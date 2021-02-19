@@ -23,7 +23,7 @@ ckan.module('sageinterface_recline', function (jQuery) {
         }
   
         var errorMsg, dataset, map_config;
-        console.log(resourceData);
+        //console.log(resourceData);
         dataset = new recline.Model.Dataset({records: resourceData});
   
         var query = new recline.Model.Query();
