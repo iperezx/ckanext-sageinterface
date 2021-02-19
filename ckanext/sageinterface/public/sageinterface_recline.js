@@ -50,9 +50,7 @@ ckan.module('sageinterface_recline', function (jQuery) {
           });
     },
     initializeView: function (dataset) {
-        var view = this._newDataExplorer(dataset);
-        view.visible = true;
-        view.render();
+        this._newDataExplorer(dataset);
     },
     _newDataExplorer: function (dataset) {
       var views = [
@@ -86,14 +84,6 @@ ckan.module('sageinterface_recline', function (jQuery) {
       });
 
       return dataExplorer;
-    },
-
-    _renderControls: function (el, controls, className) {
-        var controlsEl = jQuery("<div class=\"clearfix " + className + "\" />");
-        for (var i = 0; i < controls.length; i++) {
-          controlsEl.append(controls[i].el);
-        }
-        jQuery(el).append(controlsEl);
     }
   };
 });
