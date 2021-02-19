@@ -10,6 +10,7 @@ from requests import Session, Request
 import ckan.model as model
 from ckan.lib.base import (c, request, response, abort)
 from ckanext.archiver.model import Archival
+import ckanext.resourceproxy.plugin as proxy
 
 log = logging.getLogger('ckanext.sageinterface.lib.helpers')
 
@@ -69,3 +70,16 @@ def get_url(resource,dataset_name,query):
         log.debug('Resource is not archived: %s', resource_url)
     
     return url,archived
+
+def get_data(data_dict):
+    package_name = data_dict['package']['name']
+    resource = data_dict['resource']
+    query = dict()
+    url,archived = get_url(resource,package_name,query)
+    if not archived:
+        url = resource.get('url')
+    req = urllib2.Request(url)
+    r = urllib2.urlopen(req)
+    data_str = r.read()
+    data_json = json.loads(data_str)
+    return data_json

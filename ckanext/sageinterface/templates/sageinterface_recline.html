@@ -4,8 +4,8 @@
 
 {% block page %}
   <div data-module="sageinterface_recline"
-       data-module-resource-url = "{{ h.dump_json(resource_url)}}";
-       data-module-resource-view = "{{ h.dump_json(resource_view_json) }}";
+       data-module-resource-data = "{{ h.dump_json(resource_data)}}";
+       data-module-resource-view = "{{ h.dump_json(resource_view) }}";
        >
     <h4 class="loading-dialog">
       <div class="loading-spinner"></div>

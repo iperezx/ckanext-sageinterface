@@ -5,28 +5,24 @@ ckan.module('sageinterface_recline', function (jQuery) {
     },
     initialize: function () {
         jQuery.proxyAll(this, /_on/);
-        this.options.resourceUrl = JSON.parse(this.options.resourceUrl)
+        this.options.resourceData = JSON.parse(this.options.resourceData);
         this.options.resourceView = JSON.parse(this.options.resourceView);
         this.el.ready(this._onReady);
     },
     _onReady: function() {
-        var resourceURL = this.options.resourceUrl,
+        var resourceData = this.options.resourceData,
             resourceView = this.options.resourceView;
   
-        this.loadView(resourceURL, resourceView);
+        this.loadView(resourceData, resourceView);
     },
-    loadView: function (resourceURL, reclineView) {
+    loadView: function (resourceData, reclineView) {
         var self = this;
         function showError(msg){
           msg = msg || self._('error loading view');
           window.parent.ckan.pubsub.publish('data-viewer-error', msg);
         }
   
-        var errorMsg, dataset, map_config,resourceData;
-        var request = new XMLHttpRequest();
-        request.open('GET',resourceURL,false);
-        request.send();
-        resourceData = JSON.parse(request.response);
+        var errorMsg, dataset, map_config;
         console.log(resourceData);
         dataset = new recline.Model.Dataset({records: resourceData});
   
