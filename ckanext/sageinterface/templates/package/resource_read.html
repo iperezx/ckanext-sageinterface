@@ -1,0 +1,28 @@
+{% ckan_extends %}
+
+{% block resource_additional_information_inner %}
+  {% block sage_resource_data_dictionary %}
+    <div class="module-content">
+      <h2>{{ _('Data Dictionary') }}</h2>
+      <table class="table table-striped table-bordered table-condensed" data-module="table-toggle-more">
+        <thead>
+          {% block sage_resouce_data_dictionary_headers %}
+          <tr>
+            <th scope="col">{{ _('Column') }}</th>
+            <th scope="col">{{ _('Type') }}</th>
+            <th scope="col">{{ _('Label') }}</th>
+            <th scope="col">{{ _('Description') }}</th>
+          </tr>
+          {% endblock %}
+        </thead>
+        {% block resource_data_dictionary_data %}
+          {% set dict=h.data_dictionary() %}
+          {% for field in dict %}
+            {% snippet "package/snippets/sage_data_dictionary.html", field=field %}
+          {% endfor %}
+        {% endblock %}
+      </table>
+    </div>
+  {% endblock %}
+  {{ super() }}
+{% endblock %}

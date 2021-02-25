@@ -11,6 +11,7 @@ import ckan.model as model
 from ckan.lib.base import (c, request, response, abort)
 from ckanext.archiver.model import Archival
 import ckanext.resourceproxy.plugin as proxy
+from ckan.plugins import toolkit as tk
 
 log = logging.getLogger('ckanext.sageinterface.lib.helpers')
 
@@ -83,3 +84,16 @@ def get_data(data_dict):
     data_str = r.read()
     data_json = json.loads(data_str)
     return data_json
+
+def getFieldsTemplate():
+    template = {
+                "id": None,
+                "type": None,
+                "label": None,
+                "description": None
+            }
+    return template
+
+def data_dictionary():
+    template = getFieldsTemplate()
+    return template
