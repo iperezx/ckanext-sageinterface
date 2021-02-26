@@ -94,6 +94,10 @@ def getFieldsTemplate():
             }
     return template
 
-def data_dictionary():
-    template = getFieldsTemplate()
-    return template
+def get_metadata(resource):
+    url = resource.get('url')
+    req = urllib2.Request(url)
+    r = urllib2.urlopen(req)
+    data_str = r.read()
+    data_json = json.loads(data_str)
+    return data_json["metadata"]

@@ -4,7 +4,7 @@ import json
 from pylons import config
 import ckan.plugins as p
 import ckanext.resourceproxy.plugin as proxy
-from ckanext.sageinterface.lib.helpers import (get_data, data_dictionary)
+from ckanext.sageinterface.lib.helpers import (get_data, get_metadata)
 
 log = logging.getLogger('ckanext.sageinterface')
 
@@ -55,11 +55,11 @@ class SageinterfacePlugin(p.SingletonPlugin):
         return self.proxy_enabled and not datastore_active
     
     def setup_template_variables(self, context, data_dict):        
-        data = get_data(data_dict)
+        self.data = get_data(data_dict)
         log.info('view: {0}'.format(json.dumps(data_dict['resource_view'])))
         # log.info('url: {0}'.format(json.dumps(url)))
         return {'resource_view': json.dumps(data_dict['resource_view']),
-                'resource_data': json.dumps(data)}
+                'resource_data': json.dumps(self.data["data"])}
 
     def preview_template(self, context, data_dict):
         return 'sageinterface_recline.html'
@@ -69,4 +69,4 @@ class SageinterfacePlugin(p.SingletonPlugin):
 
     # ITemplateHelpers
     def get_helpers(self):
-        return {'data_dictionary': data_dictionary}
+        return {'get_metadata': get_metadata}

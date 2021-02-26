@@ -16,7 +16,7 @@
           {% endblock %}
         </thead>
         {% block resource_data_dictionary_data %}
-          {% set dict=h.data_dictionary() %}
+          {% set dict=h.get_metadata(res) %}
           {% for field in dict %}
             {% snippet "package/snippets/sage_data_dictionary.html", field=field %}
           {% endfor %}
