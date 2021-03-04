@@ -1,6 +1,7 @@
 {% ckan_extends %}
 
 {% block resource_additional_information_inner %}
+  {% if not res.datastore_active %}
   {% block sage_resource_data_dictionary %}
     <div class="module-content">
       <h2>{{ _('Data Dictionary') }}</h2>
@@ -15,7 +16,7 @@
           </tr>
           {% endblock %}
         </thead>
-        {% block resource_data_dictionary_data %}
+        {% block sage_resource_data_dictionary_data %}
           {% set dict=h.get_metadata(res) %}
           {% for field in dict %}
             {% snippet "package/snippets/sage_data_dictionary.html", field=field %}
@@ -24,5 +25,6 @@
       </table>
     </div>
   {% endblock %}
+  {% endif %}
   {{ super() }}
 {% endblock %}
