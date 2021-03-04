@@ -1,7 +1,8 @@
 {% ckan_extends %}
 
 {% block resource_additional_information_inner %}
-  {% if not res.datastore_active %}
+  {% set dict=h.get_metadata(res) %}
+  {% if not res.datastore_active and dict is not none %}
   {% block sage_resource_data_dictionary %}
     <div class="module-content">
       <h2>{{ _('Data Dictionary') }}</h2>

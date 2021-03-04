@@ -100,4 +100,9 @@ def get_metadata(resource):
     r = urllib2.urlopen(req)
     data_str = r.read()
     data_json = json.loads(data_str)
-    return data_json["metadata"]
+    log.debug('data_json %s', data_json)
+    metadata_key = "metadata"
+    if type(data_json) == dict:
+        if metadata_key in data_json.keys():
+            return data_json[metadata_key]
+    return None
