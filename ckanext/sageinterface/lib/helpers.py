@@ -95,14 +95,16 @@ def getFieldsTemplate():
     return template
 
 def get_metadata(resource):
-    url = resource.get('url')
-    req = urllib2.Request(url)
-    r = urllib2.urlopen(req)
-    data_str = r.read()
-    data_json = json.loads(data_str)
-    log.debug('data_json %s', data_json)
-    metadata_key = "metadata"
-    if type(data_json) == dict:
-        if metadata_key in data_json.keys():
-            return data_json[metadata_key]
+    datastore_active = resource.get('datastore_active')
+    if not datastore_active:
+        url = resource.get('url')
+        req = urllib2.Request(url)
+        r = urllib2.urlopen(req)
+        data_str = r.read()
+        data_json = json.loads(data_str)
+        log.debug('data_json %s', data_json)
+        metadata_key = "metadata"
+        if type(data_json) == dict:
+            if metadata_key in data_json.keys():
+                return data_json[metadata_key]
     return None
