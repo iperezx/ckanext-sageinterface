@@ -5,6 +5,7 @@ from pylons import config
 import ckan.plugins as p
 import ckanext.resourceproxy.plugin as proxy
 from ckanext.sageinterface.lib.helpers import (get_data, get_metadata)
+import ckanext.sageinterface.logic.action as action
 
 log = logging.getLogger('ckanext.sageinterface')
 
@@ -13,6 +14,7 @@ class SageinterfacePlugin(p.SingletonPlugin):
     p.implements(p.IConfigurable, inherit=True)
     p.implements(p.IResourceView, inherit=True)
     p.implements(p.ITemplateHelpers)
+    p.implements(p.IActions)
     proxy_enabled = False
 
     # IConfigurer
@@ -70,3 +72,8 @@ class SageinterfacePlugin(p.SingletonPlugin):
     # ITemplateHelpers
     def get_helpers(self):
         return {'get_metadata': get_metadata}
+
+    # IActions
+    def get_actions(self):
+        actions = { 'sagecommons_create': action.sagecommons_create}
+        return actions
