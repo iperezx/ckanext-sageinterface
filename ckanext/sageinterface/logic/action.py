@@ -21,13 +21,10 @@ def _rename_field(data_dict, term, replace):
     return data_dict
 
 def sagecommons_create(context, data_dict):
-    records = data_dict.pop('records', None)
     resource = data_dict.pop('resource', None)
     schema = context.get('schema', sageinterface_schema.create_schema())
     data_dict, errors = _validate(data_dict, schema, context)
 
-    if records:
-        data_dict['records'] = records
     if resource:
         data_dict['resource'] = resource
     if errors:
@@ -45,5 +42,14 @@ def sagecommons_create(context, data_dict):
     
     if 'resource' in data_dict:
         has_url = 'url' in data_dict['resource']
+        resource_dict = p.toolkit.get_action('resource_create')(
+            context, data_dict['resource'])
+        data_dict['resource_id'] = resource_dict['id']
+        p.toolkit.get_action('resource_view_create')(
+            context,
+            {'resource_id':data_dict['resource_id'],
+            'title': 'Sage Interface View',
+            'view_type': 'sageinterfaceview'
+            })
 
     return _unrename_json_field(data_dict)
