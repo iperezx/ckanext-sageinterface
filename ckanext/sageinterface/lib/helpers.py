@@ -96,7 +96,8 @@ def getFieldsTemplate():
 
 def get_metadata(resource):
     datastore_active = resource.get('datastore_active')
-    if not datastore_active:
+    formatType = resource.get('Format')
+    if not datastore_active and formatType == "JSON":
         url = resource.get('url')
         req = urllib2.Request(url)
         r = urllib2.urlopen(req)
