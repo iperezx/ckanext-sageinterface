@@ -16,7 +16,6 @@ from ckan.plugins import toolkit as tk
 
 log = logging.getLogger('ckanext.sageinterface.lib.helpers')
 sagecommons_formats = ['json']
-string_null = 'null'
 data_keyword = 'data'
 meta_keyword = 'metadata'
 honeyhouse_keyword='honeyhouse'
@@ -28,14 +27,24 @@ def identify_resource(resource_id,dataset_name):
     # FIX: add group name later
     return '/dataset/{0}/resource/{1}'.format(dataset_name, resource_id)
 
+def query_to_dict(query):
+    if type(query)== dict or query is None:
+        query_json = json.dumps(query)
+    else:
+        query_dict = eval(query)
+        query_json = json.dumps(query_dict)
+    return query_json
+
+
 def get_rawdata(url,query):
     context = ssl._create_unverified_context()
     empty_dict = {data_keyword:[],meta_keyword:[]}
+    query_json = query_to_dict(query)
     try:
-        if query == string_null:
+        if query is None:
             req = urllib2.Request(url)
         else:
-            req = urllib2.Request(url,query)
+            req = urllib2.Request(url,query_json)
         r = urllib2.urlopen(req,context=context)
     except Exception, e:
         log.error(u"Request {0}, {1}".format(url, e))
@@ -62,7 +71,7 @@ def get_rawdata(url,query):
 def get_data(data_dict):
     package_name = data_dict['package']['name']
     resource = data_dict['resource']
-    query = json.dumps(resource.get('query'))
+    query = resource.get('query')
     url = resource.get('url')
     data = get_rawdata(url,query)
     return data
@@ -81,7 +90,7 @@ def get_metadata(resource):
     formatType = resource.get('format').lower()
     if not datastore_active and formatType in sagecommons_formats:
         url = resource.get('url')
-        query = json.dumps(resource.get('query'))
+        query = resource.get('query')
         data = get_rawdata(url,query)
         if type(data) == dict:
             if meta_keyword in data.keys():
