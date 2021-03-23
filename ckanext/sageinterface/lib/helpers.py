@@ -51,10 +51,13 @@ def get_rawdata(url,query):
         return empty_dict
 
     data_str = r.read()
-    if honeyhouse_keyword in url:
-        data_json = [json.loads(str(item)) for item in data_str.strip().split('\n')]
+    if data_str:
+        if honeyhouse_keyword in url:
+            data_json = [json.loads(str(item)) for item in data_str.strip().split('\n')]
+        else:
+            data_json = json.loads(data_str)
     else:
-        data_json = json.loads(data_str)
+        data_json = []
     
     if type(data_json) == dict:
         if data_keyword in data_json.keys() and meta_keyword in data_json.keys():
