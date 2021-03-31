@@ -1,5 +1,34 @@
 {% ckan_extends %}
 
+{% block resource_actions_inner %}
+  {{ super() }}
+  {% if not res.datastore_active %}
+  <li>
+    <div class="btn-group">
+      <a class="btn btn-primary resource-url-analytics resource-type-{{ res.resource_type }}" href="{{ res.url }}">
+          <i class="fa fa-arrow-circle-o-down"></i> {{ _('Download') }}
+      </a>
+    {% block download_resource_button %}
+    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <a href="{{ h.url_for(controller='ckanext.datastore.controller:DatastoreController', action='dump', resource_id=res.id, bom=True) }}"
+          target="_blank">
+          <span>CSV</span>
+        </a>
+        <a href="{{ h.url_for(controller='ckanext.datastore.controller:DatastoreController', action='dump', resource_id=res.id, format='json') }}"
+          target="_blank">
+          <span>JSON</span>
+        </a>
+      </li>
+    </ul>
+    {% endblock %}
+  </li>
+  {% endif %}
+{% endblock %}
+
 {% block resource_additional_information_inner %}
   {% set dict=h.get_metadata(res) %}
   {% if not res.datastore_active and dict is not none %}
