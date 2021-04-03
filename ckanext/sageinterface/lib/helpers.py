@@ -35,7 +35,6 @@ def query_to_dict(query):
         query_json = json.dumps(query_dict)
     return query_json
 
-
 def get_rawdata(url,query):
     context = ssl._create_unverified_context()
     empty_dict = {data_keyword:[],meta_keyword:[]}
@@ -69,11 +68,7 @@ def get_rawdata(url,query):
         data = {data_keyword: data_json,meta_keyword:[]}
     return data
 
-
-
-def get_data(data_dict):
-    package_name = data_dict['package']['name']
-    resource = data_dict['resource']
+def get_data(resource):
     query = resource.get('query')
     url = resource.get('url')
     data = get_rawdata(url,query)
@@ -99,3 +94,23 @@ def get_metadata(resource):
             if meta_keyword in data.keys():
                 return data[meta_keyword]
     return None
+
+def convert_datastorefmt(data):
+    #data is a return value from get_data
+    empty_template = {'fields':[],'records':[]}
+    if data[data_keyword]:
+        return empty_template
+    else:
+        #extract keys from list of dictionaries:
+        set_ = set()
+        for dict_ in data[data_keyword]:
+            set_.update(dict_.keys())
+        fields = []
+        for field in set_:
+            fields.append({'id':field})
+
+        converted_data = empty_template
+        converted_data['fields'] = fields
+        converted_data['records'] = json.dumps(data[data_keyword])
+        return converted_data
+    return empty_template

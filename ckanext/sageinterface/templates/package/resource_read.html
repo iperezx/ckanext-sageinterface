@@ -14,13 +14,9 @@
     </button>
     <ul class="dropdown-menu">
       <li>
-        <a href="{{ h.url_for(controller='ckanext.datastore.controller:DatastoreController', action='dump', resource_id=res.id, bom=True) }}"
+        <a href="{{ h.url_for(controller='ckanext.sageinterface.controller:SageInterfaceController', action='dump', resource_id=res.id, bom=True) }}"
           target="_blank">
           <span>CSV</span>
-        </a>
-        <a href="{{ h.url_for(controller='ckanext.datastore.controller:DatastoreController', action='dump', resource_id=res.id, format='json') }}"
-          target="_blank">
-          <span>JSON</span>
         </a>
       </li>
     </ul>

@@ -15,6 +15,7 @@ class SageinterfacePlugin(p.SingletonPlugin):
     p.implements(p.IResourceView, inherit=True)
     p.implements(p.ITemplateHelpers)
     p.implements(p.IActions)
+    p.implements(p.IRoutes, inherit=True)
     proxy_enabled = False
 
     # IConfigurer
@@ -56,8 +57,8 @@ class SageinterfacePlugin(p.SingletonPlugin):
         log.info('datastoreActive: {0}'.format(datastore_active))
         return self.proxy_enabled and not datastore_active
     
-    def setup_template_variables(self, context, data_dict):        
-        self.data = get_data(data_dict)
+    def setup_template_variables(self, context, data_dict):
+        self.data = get_data(data_dict['resource'])
         log.info('view: {0}'.format(json.dumps(data_dict['resource_view'])))
         # log.info('url: {0}'.format(json.dumps(url)))
         return {'resource_view': json.dumps(data_dict['resource_view']),
@@ -77,3 +78,11 @@ class SageinterfacePlugin(p.SingletonPlugin):
     def get_actions(self):
         actions = { 'sagecommons_create': action.sagecommons_create}
         return actions
+
+   # IRoutes
+    def before_map(self, m):
+        m.connect(
+            '/sageinterface/dump/{resource_id}',
+            controller='ckanext.sageinterface.controller:SageInterfaceController',
+            action='dump')
+        return m
