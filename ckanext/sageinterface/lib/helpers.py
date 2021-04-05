@@ -97,8 +97,8 @@ def get_metadata(resource):
 
 def convert_datastorefmt(data):
     #data is a return value from get_data
-    empty_template = {'fields':[],'records':[]}
-    if data[data_keyword]:
+    empty_template = {'fields':'','records':''}
+    if len(data[data_keyword]) == 0 :
         return empty_template
     else:
         #extract keys from list of dictionaries:
@@ -111,6 +111,18 @@ def convert_datastorefmt(data):
 
         converted_data = empty_template
         converted_data['fields'] = fields
-        converted_data['records'] = json.dumps(data[data_keyword])
+        converted_data['records'] = data[data_keyword]
         return converted_data
     return empty_template
+
+def convert_format(dataStoreFmt,records_format):
+    dataStoreFmtConv = dataStoreFmt
+    records = dataStoreFmtConv['records']
+    if len(records) > 0:
+        if records_format == 'csv':
+            output = ''
+            for item in records:
+                item_str = ','.join(item.itervalues())
+                output += item_str + '\n'
+            dataStoreFmtConv['records'] = output
+    return dataStoreFmtConv

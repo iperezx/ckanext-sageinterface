@@ -33,7 +33,11 @@ import ckan.plugins as p
 
 from ckan.common import c
 
-from ckanext.sageinterface.lib.helpers import (get_data,convert_datastorefmt)
+from ckanext.sageinterface.lib.helpers import (
+    get_data,
+    convert_datastorefmt,
+    convert_format
+)
 
 int_validator = get_validator('int_validator')
 boolean_validator = get_validator('boolean_validator')
@@ -89,7 +93,7 @@ def dump_to(resource,resource_id, output, fmt, offset, limit, options):
     def result_page(offs, lim):
         data = get_data(resource)
         dataStoreFmt = convert_datastorefmt(data)
-        return dataStoreFmt
+        return convert_format(dataStoreFmt,records_format)
         # return get_action('datastore_search')(None, {
         #     'resource_id': resource_id,
         #     'limit':
