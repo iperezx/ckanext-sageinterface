@@ -39,6 +39,7 @@ def get_rawdata(url,query):
     context = ssl._create_unverified_context()
     empty_dict = {data_keyword:[],meta_keyword:[]}
     query_json = query_to_dict(query)
+    log.info("query_json: {0}".format(query_json))
     try:
         if query is None:
             req = urllib2.Request(url)
@@ -122,7 +123,11 @@ def convert_format(dataStoreFmt,records_format):
         if records_format == 'csv':
             output = ''
             for item in records:
-                item_str = ','.join(item.itervalues())
-                output += item_str + '\n'
+                for key, value in item.items():
+                    item_str = json.dumps(value)
+                    if type(value) == dict:
+                        item_str = json.dumps(value).replace(',','\t')
+                    output += item_str + ','
+                output += '\n'
             dataStoreFmtConv['records'] = output
     return dataStoreFmtConv
