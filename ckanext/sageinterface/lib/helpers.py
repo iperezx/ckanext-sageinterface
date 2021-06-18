@@ -18,7 +18,7 @@ log = logging.getLogger('ckanext.sageinterface.lib.helpers')
 sagecommons_formats = ['json']
 data_keyword = 'data'
 meta_keyword = 'metadata'
-honeyhouse_keyword='honeyhouse'
+sdr_keywords=['honeyhouse','sagecontinuum']
 
 def identify_resource(resource_id,dataset_name):
     '''Returns a printable identity of a resource object.
@@ -52,7 +52,7 @@ def get_rawdata(url,query):
 
     data_str = r.read()
     if data_str:
-        if honeyhouse_keyword in url:
+        if any(keyword in url for keyword in sdr_keywords):
             data_json = [json.loads(str(item)) for item in data_str.strip().split('\n')]
         else:
             data_json = json.loads(data_str)
